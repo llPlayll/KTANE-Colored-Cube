@@ -11,6 +11,7 @@ public class ColoredCube : MonoBehaviour
 {
     public KMBombInfo Bomb;
     public KMAudio Audio;
+    public KMColorblindMode Colorblind;
 
     static int ModuleIdCounter = 1;
     int ModuleId;
@@ -44,6 +45,7 @@ public class ColoredCube : MonoBehaviour
     int targetTime;
     List<int> colorIndexes = new List<int>() { };
     List<int> targetPositions = new List<int>() { };
+    bool colorblindActive;
 
     void Awake()
     {
@@ -54,6 +56,14 @@ public class ColoredCube : MonoBehaviour
         RightFace.OnInteract += delegate () { RightPress(); return false; };
         FrontFace.OnInteract += delegate () { FrontPress(); return false; };
         LeftFace.OnInteract += delegate () { LeftPress(); return false; };
+
+        colorblindActive = Colorblind.ColorblindModeActive; // Causes an error???
+        ColorblindSet();
+    }
+
+    void ColorblindSet()
+    {
+        colorblindText.gameObject.SetActive(colorblindActive);
     }
 
     void MiddlePress()
@@ -194,11 +204,6 @@ public class ColoredCube : MonoBehaviour
         CubeCycle();
         CalculateTime();
         CalculateTargetPositions();
-    }
-
-    void Update()
-    {
-        
     }
 
     void CalculateTime()
