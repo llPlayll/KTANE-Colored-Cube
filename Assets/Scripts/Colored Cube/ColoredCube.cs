@@ -308,12 +308,117 @@ public class ColoredCube : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} help is not a thing. :D";
+    private readonly string TwitchHelpMessage = @"!{0} m/mid/middle to press the middle part of the cube at any time. !{0} m/mid/middle # to press the middle part of the cube at last digit of the timer being #. !{0} move u/b/r/d/f/l to move. Directions can be chained with spaces or without like !{0} move uurlf or !{0} u u r r.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string Command)
     {
-        yield return null;
+        var tokens = Command.ToLowerInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (tokens.Length == 0)
+        {
+            yield break;
+        }
+
+        switch (tokens[0])
+        {
+            case "m":
+            case "mid":
+            case "middle":
+                if (tokens.Length == 1)
+                {
+                    CubeButton.OnInteract();
+                    yield return new WaitForSeconds(0.1f);
+                    break;
+                }
+                if (!"0123456789".Contains(tokens[1]) || tokens[1].Length > 1)
+                {
+                    yield return null;
+                    yield return "sendtochaterror Invalid press time!";
+                    yield break;
+                }
+                string pressTime = tokens[1];
+                yield return null;
+
+                string curLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                while (!(curLastDigit == pressTime))
+                {
+                    yield return null;
+                    curLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                }
+                CubeButton.OnInteract();
+                yield return new WaitForSeconds(0.1f);
+                break;
+            case "move":
+                if (tokens.Length == 1)
+                {
+                    yield return null;
+                    yield return "sendtochaterror No moves given!";
+                    yield break;
+                }
+                if (tokens.Length == 2)
+                {
+                    foreach (char token in tokens[1])
+                    {
+                        switch (token.ToString().ToLowerInvariant())
+                        {
+                            case "u":
+                            case "b":
+                                BackFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                            case "r":
+                                RightFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                            case "d":
+                            case "f":
+                                FrontFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                            case "l":
+                                LeftFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (string token in tokens)
+                    {
+                        switch (token)
+                        {
+                            case "u":
+                            case "up":
+                            case "b":
+                            case "back":
+                                BackFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                            case "r":
+                            case "right":
+                                RightFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                            case "d":
+                            case "down":
+                            case "f":
+                            case "front":
+                                FrontFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                            case "l":
+                            case "left":
+                                LeftFace.OnInteract();
+                                yield return new WaitForSeconds(0.1f);
+                                break;
+                        }
+                    }
+                }
+                yield return new WaitForSeconds(0.1f);
+                break;
+        }
     }
 
     IEnumerator TwitchHandleForcedSolve()
