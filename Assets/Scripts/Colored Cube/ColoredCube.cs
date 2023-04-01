@@ -308,7 +308,7 @@ public class ColoredCube : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} m/mid/middle to press the middle part of the cube at any time. !{0} m/mid/middle # to press the middle part of the cube at last digit of the timer being #. !{0} move u/b/r/d/f/l to move. Directions can be chained with spaces or without like !{0} move uurlf or !{0} u u r r.";
+    private readonly string TwitchHelpMessage = @"!{0} m/mid/middle to press the middle part of the cube at any time. !{0} m/mid/middle # to press the middle part of the cube at last digit of the timer being #. !{0} move u/b/r/d/f/l to move. Directions can be chained like so: !{0} move uurlfb.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string Command)
@@ -322,6 +322,8 @@ public class ColoredCube : MonoBehaviour
 
         switch (tokens[0])
         {
+            default:
+                yield break;
             case "m":
             case "mid":
             case "middle":
@@ -356,39 +358,14 @@ public class ColoredCube : MonoBehaviour
                     yield return "sendtochaterror No moves given!";
                     yield break;
                 }
-                if (tokens.Length == 2)
-                {
-                    foreach (char token in tokens[1])
-                    {
-                        switch (token.ToString().ToLowerInvariant())
-                        {
-                            case "u":
-                            case "b":
-                                BackFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            case "r":
-                                RightFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            case "d":
-                            case "f":
-                                FrontFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            case "l":
-                                LeftFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                        }
-                    }
-                }
                 else
                 {
                     foreach (string token in tokens)
                     {
                         switch (token)
                         {
+                            default:
+                                yield break;
                             case "u":
                             case "up":
                             case "b":
