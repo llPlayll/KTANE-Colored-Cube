@@ -57,7 +57,7 @@ public class ColoredCube : MonoBehaviour
         FrontFace.OnInteract += delegate () { FrontPress(); return false; };
         LeftFace.OnInteract += delegate () { LeftPress(); return false; };
 
-        colorblindActive = Colorblind.ColorblindModeActive; // Causes an error???
+        colorblindActive = Colorblind.ColorblindModeActive;
         ColorblindSet();
     }
 
