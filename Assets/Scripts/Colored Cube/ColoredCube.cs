@@ -324,6 +324,7 @@ public class ColoredCube : MonoBehaviour
         {
             default:
                 yield break;
+                break;
             case "m":
             case "mid":
             case "middle":
@@ -366,6 +367,7 @@ public class ColoredCube : MonoBehaviour
                         {
                             default:
                                 yield break;
+                                break;
                             case "u":
                             case "up":
                             case "b":
