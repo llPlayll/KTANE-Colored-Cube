@@ -75,7 +75,7 @@ public class ColoredCube : MonoBehaviour
 
     void Submit()
     {
-        Debug.LogFormat("Colored Cube #{0}. Submitted position is {1}.", ModuleId, curPosition);
+        Debug.LogFormat("Colored Cube #{0}. Submitted position is {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
         if (targetPositions.Contains(curPosition))
         {
             Debug.LogFormat("Colored Cube #{0}. Submitted position is one of the target positions. Correct!", ModuleId);
@@ -110,7 +110,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition -= 7;
-                Debug.LogFormat("Colored Cube #{0}. The back face of the cube was pressed, moving up, current position: {1}", ModuleId, curPosition);
+                Debug.LogFormat("Colored Cube #{0}. The back face of the cube was pressed, moving up, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }        
         }
     }
@@ -132,7 +132,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition += 1;
-                Debug.LogFormat("Colored Cube #{0}. The right face of the cube was pressed, moving right, current position: {1}", ModuleId, curPosition);
+                Debug.LogFormat("Colored Cube #{0}. The right face of the cube was pressed, moving right, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
@@ -154,7 +154,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition += 7;
-                Debug.LogFormat("Colored Cube #{0}. The front face of the cube was pressed, moving down, current position: {1}", ModuleId, curPosition);
+                Debug.LogFormat("Colored Cube #{0}. The front face of the cube was pressed, moving down, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
@@ -176,7 +176,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition -= 1;
-                Debug.LogFormat("Colored Cube #{0}. The left face of the cube was pressed, moving left, current position: {1}", ModuleId, curPosition);
+                Debug.LogFormat("Colored Cube #{0}. The left face of the cube was pressed, moving left, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
@@ -272,7 +272,7 @@ public class ColoredCube : MonoBehaviour
 
             targetPositions.Add((curPairNumber[0] - 1) * 7 + curPairNumber[1] - 1);
         }
-        Debug.LogFormat("Colored Cube #{0}. Target positions are {1}, {2} and {3}", ModuleId, targetPositions[0], targetPositions[1], targetPositions[2]);
+        Debug.LogFormat("Colored Cube #{0}. Target positions are {1}, {2} and {3}", ModuleId, "ABCDEFG"[targetPositions[0] % 7].ToString() + (targetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[1] % 7].ToString() + (targetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[2] % 7].ToString() + (targetPositions[2] / 7 + 1).ToString());
     }
 
     void CubeCycle()
