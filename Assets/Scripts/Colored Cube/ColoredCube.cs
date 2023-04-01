@@ -308,7 +308,7 @@ public class ColoredCube : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} m/mid/middle to press the middle part of the cube at any time. !{0} m/mid/middle # to press the middle part of the cube at last digit of the timer being #. !{0} move u/b/r/d/f/l to move. Directions can be chained like so: !{0} move uurlfb.";
+    private readonly string TwitchHelpMessage = @"!{0} m/mid/middle to press the middle part of the cube at any time. !{0} m/mid/middle # to press the middle part of the cube at last digit of the timer being #. !{0} move u/b/r/d/f/l to move. Directions can be chained like so: !{0} move uurlf.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string Command)
@@ -322,9 +322,6 @@ public class ColoredCube : MonoBehaviour
 
         switch (tokens[0])
         {
-            default:
-                yield break;
-                break;
             case "m":
             case "mid":
             case "middle":
@@ -359,44 +356,38 @@ public class ColoredCube : MonoBehaviour
                     yield return "sendtochaterror No moves given!";
                     yield break;
                 }
-                else
+                if (tokens.Length == 2)
                 {
-                    foreach (string token in tokens)
+                    foreach (char token in tokens[1])
                     {
-                        switch (token)
+                        switch (token.ToString().ToLowerInvariant())
                         {
-                            default:
-                                yield break;
-                                break;
                             case "u":
-                            case "up":
                             case "b":
-                            case "back":
                                 BackFace.OnInteract();
                                 yield return new WaitForSeconds(0.1f);
                                 break;
                             case "r":
-                            case "right":
                                 RightFace.OnInteract();
                                 yield return new WaitForSeconds(0.1f);
                                 break;
                             case "d":
-                            case "down":
                             case "f":
-                            case "front":
                                 FrontFace.OnInteract();
                                 yield return new WaitForSeconds(0.1f);
                                 break;
                             case "l":
-                            case "left":
                                 LeftFace.OnInteract();
                                 yield return new WaitForSeconds(0.1f);
                                 break;
+                            default:
+                                yield break;
                         }
                     }
                 }
-                yield return new WaitForSeconds(0.1f);
                 break;
+            default:
+                yield break;
         }
     }
 
