@@ -203,33 +203,29 @@ public class ColoredCube : MonoBehaviour
 
     void CalculateTime()
     {
-        if (colorIndexes[0] == 0)
+        switch (colorIndexes[0])
         {
-            targetTime = (Bomb.GetSerialNumberLetters().ToList().Count + 8) % 10;
-        }
-        else if (colorIndexes[0] == 1)
-        {
-            targetTime = (Bomb.GetSerialNumberNumbers().ToList().Count + 3) % 10;
-        }
-        else if (colorIndexes[0] == 2)
-        {
-            targetTime = (Bomb.GetOffIndicators().Count() + 1) % 10;
-        }
-        else if (colorIndexes[0] == 3)
-        {
-            targetTime = (Bomb.GetBatteryCount() + 5) % 10;
-        }
-        else if (colorIndexes[0] == 4)
-        {
-            targetTime = (Bomb.GetPortCount() + 9) % 10;
-        }
-        else if (colorIndexes[0] == 5)
-        {
-            targetTime = (Bomb.GetOnIndicators().Count() + 4) % 10;
-        }
-        else if (colorIndexes[0] == 6)
-        {
-            targetTime = ((Bomb.GetSerialNumberNumbers().ToList())[(Bomb.GetSerialNumberNumbers()).ToList().Count - 1] + 7) % 10;
+            case 0:
+                targetTime = (Bomb.GetSerialNumberLetters().ToList().Count + 8) % 10;
+                break;
+            case 1:
+                targetTime = (Bomb.GetSerialNumberNumbers().ToList().Count + 3) % 10;
+                break;
+            case 2:
+                targetTime = (Bomb.GetOffIndicators().Count() + 1) % 10;
+                break;
+            case 3:
+                targetTime = (Bomb.GetBatteryCount() + 5) % 10;
+                break;
+            case 4:
+                targetTime = (Bomb.GetPortCount() + 9) % 10;
+                break;
+            case 5:
+                targetTime = (Bomb.GetOnIndicators().Count() + 4) % 10;
+                break;
+            case 6:
+                targetTime = ((Bomb.GetSerialNumberNumbers().ToList())[(Bomb.GetSerialNumberNumbers()).ToList().Count - 1] + 7) % 10;
+                break;
         }
         Debug.LogFormat("Colored Cube #{0}. To cycle the cube, the middle of the it should be pressed at the last digit of the timer being {1}.", ModuleId, targetTime);
     }
