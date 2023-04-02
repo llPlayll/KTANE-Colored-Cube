@@ -320,13 +320,13 @@ public class ColoredCube : MonoBehaviour
                 }
                 else
                 {
-                    if (curPair[j].ToString() == "0")
+                    if (curPair[j] == '0')
                     {
                         curPairNumber.Add(1);
                     }
                     else
                     {
-                        curPairNumber.Add("123456789".IndexOf(curPair[j]) + 1);
+                        curPairNumber.Add(Int32.Parse(curPair[j].ToString()));
                     }
                 }
             }
@@ -339,7 +339,7 @@ public class ColoredCube : MonoBehaviour
                 curPairNumber[1] -= 7;
             }
 
-            startTargetPositions.Add((curPairNumber[0] - 1) * 7 + curPairNumber[1] - 1);
+            startTargetPositions.Add((curPairNumber[0] * 7 + curPairNumber[1] - 8));
         }
         Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
     }
