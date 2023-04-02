@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   fill="none"
+   viewBox="0 0 348 348"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="Module Name.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.85035686"
+     inkscape:cx="-79.378439"
+     inkscape:cy="264.5948"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="115"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <rect
+     width="336.91"
+     height="337.67"
+     x="5.08"
+     y="5.78"
+     stroke="#000"
+     stroke-width="2"
+     id="rect2" />
+  <ellipse
+     cx="298.29"
+     cy="40.55"
+     stroke="#000"
+     stroke-width="2"
+     rx="15.9"
+     ry="15.51"
+     id="ellipse4" />
+  <rect
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.779463"
+     id="rect746"
+     width="132.22369"
+     height="132.22369"
+     x="111.23775"
+     y="101.08197" />
+</svg>
