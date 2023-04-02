@@ -43,6 +43,7 @@
                   <tr><td>White</td><td>(Lit Indicators + 4) % 10</td></tr>
                   <tr><td>Black</td><td>(Last digit in # + 7) % 10</td></tr>
                 </table>
+                <p class="centered"># - Serial Number</p>
 
                 <p>In the below grid, find your starting position. On the rows on the left, find the second color of the sequence, this is the row of your starting position. Repeat the same process on the columns on the top, using the third color of the sequence.</p>
 
@@ -56,7 +57,6 @@
                   <tr><th>W</th><td>Y</td><td>W</td><td>G</td><td>R</td><td>B</td><td>M</td><td>K</td></tr>
                   <tr><th>K</th><td>B</td><td>G</td><td>W</td><td>K</td><td>M</td><td>Y</td><td>R</td></tr>
               </table>
-
                 
                 <p>Next, find the three target positions you should submit. Take the serial number and split it into 3 pairs of 2. In each pair, convert any letters into their alphabetic positions (A = 1, B = 2...Z = 26), and replace any 0s with 1s. The first number will be used as the row, counting from the top to bottom on the rows on the left, and the second number will be used as the column, counting from left to right on the columns on the top.</p>
                 <p>Use the faces of the cube to move along the grid: the left and right faces move you left and right, the back face moves you up, and the front face moves you down. The grid does <b>not</b> wrap around. Move to the target positions in any order <b>avoiding the cells labeled with the second color of the sequence (if you start on such a cell, the module will not strike you, and if such a cell is one of the target positions, you may move to it without striking.)</b> and press the middle part when the last digit is NOT the number you got from the previous time table. This will submit your current position.</p>

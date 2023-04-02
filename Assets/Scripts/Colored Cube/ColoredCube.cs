@@ -75,44 +75,44 @@ public class ColoredCube : MonoBehaviour
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CubeButton.transform);
 
-        Debug.LogFormat("Colored Cube #{0}. The middle button was pressed at the last digit of the timer being {1}.", ModuleId, Math.Floor(Bomb.GetTime() % 60 % 10));
+        Debug.Log("Colored Cube #" + ModuleId + ". The middle button was pressed at the last digit of the timer being " + Math.Floor(Bomb.GetTime() % 60 % 10) + ".");
         if (Math.Floor(Bomb.GetTime() % 60 % 10) == targetTime)
         {
-            Debug.LogFormat("Colored Cube #{0}. The last digit of the timer matched the number gotten from the table, cycling the cube...", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". The last digit of the timer matched the number gotten from the table, cycling the cube...");
             curIndex++;
             curIndex %= 3;
             CubeCycle();
         }
         else
         {
-            Debug.LogFormat("Colored Cube #{0}. The last digit of the timer did not match the number gotten from the table, submitting current position.", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". The last digit of the timer did not match the number gotten from the table, submitting current position.");
             Submit();
         }
     }
 
     void Submit()
     {
-        Debug.LogFormat("Colored Cube #{0}. Submitted position is {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+        Debug.Log("Colored Cube #" + ModuleId + ". Submitted position is " + "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString() +  ".");
         if (targetPositions.Contains(curPosition))
         {
-            Debug.LogFormat("Colored Cube #{0}. Submitted position is one of the target positions. Correct!", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". Submitted position is one of the target positions. Correct!");
             targetPositions.Remove(curPosition);
             if (targetPositions.Count == 0)
             {
-                Debug.LogFormat("Colored Cube #{0}. All target positions were submitted, the module is solved!", ModuleId);
+                Debug.Log("Colored Cube #" + ModuleId + ". All target positions were submitted, module solved!");
                 GetComponent<KMBombModule>().HandlePass();
+                ModuleSolved = true;
             }
         }
         else
         {
-            Debug.LogFormat("Colored Cube #{0}. Submitted position is not one of the target positions, STRIKE!", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". Submitted position is not one of the target positions, Strike!");
             GetComponent<KMBombModule>().HandleStrike();
         }
     }
 
     void BackPress()
     {
-        BackFace.AddInteractionPunch();
         if (ModuleSolved)
         {
             return;
@@ -121,27 +121,26 @@ public class ColoredCube : MonoBehaviour
 
         if (curPosition - 7 < 0)
         {
-            Debug.LogFormat("Colored Cube #{0}. The back face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". The back face of the cube was pressed, but there is a wall in that direction, Strike!");
             GetComponent<KMBombModule>().HandleStrike();
         }
         else
         {
             if (grid[curPosition - 7] == colorIndexes[1] && !targetPositions.Contains(curPosition - 7))
             {
-                Debug.LogFormat("Colored Cube #{0}. The back face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!", ModuleId);
+                Debug.Log("Colored Cube #" + ModuleId + ". The back face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!");
                 GetComponent<KMBombModule>().HandleStrike();
             }
             else
             {
                 curPosition -= 7;
-                Debug.LogFormat("Colored Cube #{0}. The back face of the cube was pressed, moving up, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.Log("Colored Cube #" + ModuleId + ". The back face of the cube was pressed, moving up, current position: " + "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString() + ".");
             }        
         }
     }
 
     void RightPress()
     {
-        RightFace.AddInteractionPunch();
         if (ModuleSolved)
         {
             return;
@@ -150,27 +149,26 @@ public class ColoredCube : MonoBehaviour
 
         if ((curPosition + 1) % 7 == 0)
         {
-            Debug.LogFormat("Colored Cube #{0}. The right face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". The right face of the cube was pressed, but there is a wall in that direction, Strike!");
             GetComponent<KMBombModule>().HandleStrike();
         }
         else
         {
             if (grid[curPosition + 1] == colorIndexes[1] && !targetPositions.Contains(curPosition + 1))
             {
-                Debug.LogFormat("Colored Cube #{0}. The right face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!", ModuleId);
+                Debug.Log("Colored Cube #" + ModuleId + ". The right face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!");
                 GetComponent<KMBombModule>().HandleStrike();
             }
             else
             {
                 curPosition += 1;
-                Debug.LogFormat("Colored Cube #{0}. The right face of the cube was pressed, moving right, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.Log("Colored Cube #" + ModuleId + ". The right face of the cube was pressed, moving right, current position: " + "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString() + ".");
             }
         }
     }
 
     void FrontPress()
     {
-        FrontFace.AddInteractionPunch();
         if (ModuleSolved)
         {
             return;
@@ -179,27 +177,26 @@ public class ColoredCube : MonoBehaviour
 
         if (curPosition + 7 > 48)
         {
-            Debug.LogFormat("Colored Cube #{0}. The front face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". The front face of the cube was pressed, but there is a wall in that direction, Strike!");
             GetComponent<KMBombModule>().HandleStrike();
         }
         else
         {
             if (grid[curPosition + 7] == colorIndexes[1] && !targetPositions.Contains(curPosition + 7))
             {
-                Debug.LogFormat("Colored Cube #{0}. The front face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!", ModuleId);
+                Debug.Log("Colored Cube #" + ModuleId + ". The front face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!");
                 GetComponent<KMBombModule>().HandleStrike();
             }
             else
             {
                 curPosition += 7;
-                Debug.LogFormat("Colored Cube #{0}. The front face of the cube was pressed, moving down, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.Log("Colored Cube #" + ModuleId + ". The front face of the cube was pressed, moving down, current position: " + "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
 
     void LeftPress()
     {
-        LeftFace.AddInteractionPunch();
         if (ModuleSolved)
         {
             return;
@@ -208,20 +205,20 @@ public class ColoredCube : MonoBehaviour
 
         if (curPosition % 7 == 0)
         {
-            Debug.LogFormat("Colored Cube #{0}. The left face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
+            Debug.Log("Colored Cube #" + ModuleId + ". The left face of the cube was pressed, but there is a wall in that direction, Strike!");
             GetComponent<KMBombModule>().HandleStrike();
         }
         else
         {
             if (grid[curPosition - 1] == colorIndexes[1] && !targetPositions.Contains(curPosition - 1))
             {
-                Debug.LogFormat("Colored Cube #{0}. The left face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!", ModuleId);
+                Debug.Log("Colored Cube #" + ModuleId + ". The left face of the cube was pressed, but the cell in that direction is labeled with second color of the sequence, Strike!");
                 GetComponent<KMBombModule>().HandleStrike();
             }
             else
             {
                 curPosition -= 1;
-                Debug.LogFormat("Colored Cube #{0}. The left face of the cube was pressed, moving left, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.Log("Colored Cube #" + ModuleId + ". The left face of the cube was pressed, moving left, current position: " + "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString() + ".");
             }
         }
     }
@@ -231,10 +228,10 @@ public class ColoredCube : MonoBehaviour
         colorIndexes.Add(Rnd.Range(0, 7));
         colorIndexes.Add(Rnd.Range(0, 7));
         colorIndexes.Add(Rnd.Range(0, 7));
-        Debug.LogFormat("Colored Cube #{0}. Generated colors are {1}, {2}, {3}.", ModuleId, colorFullNamesList[colorIndexes[0]], colorFullNamesList[colorIndexes[1]], colorFullNamesList[colorIndexes[2]]);
+        Debug.Log("Colored Cube #" + ModuleId + ". Generated colors are " + colorFullNamesList[colorIndexes[0]] + ", " + colorFullNamesList[colorIndexes[1]] + ", " + colorFullNamesList[colorIndexes[2]] + ".");
 
         curPosition = 7 * colorIndexes[1] + colorIndexes[2];
-        Debug.LogFormat("Colored Cube #{0}. Starting positiong is {1} in the grid.", ModuleId, "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString());
+        Debug.Log("Colored Cube #" + ModuleId + ". Starting position is " + "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString() + " in the grid.");
 
         CubeCycle();
         CalculateTime();
@@ -267,7 +264,7 @@ public class ColoredCube : MonoBehaviour
                 targetTime = ((Bomb.GetSerialNumberNumbers().ToList())[(Bomb.GetSerialNumberNumbers()).ToList().Count - 1] + 7) % 10;
                 break;
         }
-        Debug.LogFormat("Colored Cube #{0}. To cycle the cube, the middle of the it should be pressed at the last digit of the timer being {1}.", ModuleId, targetTime);
+        Debug.Log("Colored Cube #" + ModuleId + ". To cycle the cube, the middle of the cube should be pressed at the last digit of the timer being " + targetTime + ".");
     }
 
     void CalculateTargetPositions()
@@ -312,7 +309,7 @@ public class ColoredCube : MonoBehaviour
 
             targetPositions.Add((curPairNumber[0] - 1) * 7 + curPairNumber[1] - 1);
         }
-        Debug.LogFormat("Colored Cube #{0}. Target positions are {1}, {2} and {3}", ModuleId, "ABCDEFG"[targetPositions[0] % 7].ToString() + (targetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[1] % 7].ToString() + (targetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[2] % 7].ToString() + (targetPositions[2] / 7 + 1).ToString());
+        Debug.Log("Colored Cube #" + ModuleId + ". Target positions are " + "ABCDEFG"[targetPositions[0] % 7].ToString() + (targetPositions[0] / 7 + 1).ToString() + ", " + "ABCDEFG"[targetPositions[1] % 7].ToString() + (targetPositions[1] / 7 + 1).ToString() + " and " + "ABCDEFG"[targetPositions[2] % 7].ToString() + (targetPositions[2] / 7 + 1).ToString() + ".");
     }
 
     void CubeCycle()
@@ -339,7 +336,7 @@ public class ColoredCube : MonoBehaviour
         {
             indexText.color = Color.white;
         }
-        Debug.LogFormat("Colored Cube #{0}. Current color is {1}, which is position {2} in the sequence.", ModuleId, colorFullNamesList[colorIndexes[curIndex]], curIndex + 1);
+        Debug.Log("Colored Cube #" + ModuleId + ". Current color is " + colorFullNamesList[colorIndexes[curIndex]] + ", which is position " + (curIndex + 1) + " in the sequence.");
     }
 
 #pragma warning disable 414
