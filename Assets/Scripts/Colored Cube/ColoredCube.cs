@@ -46,6 +46,7 @@ public class ColoredCube : MonoBehaviour
     List<int> colorIndexes = new List<int>() { };
     List<int> targetPositions = new List<int>() { };
     bool colorblindActive;
+    bool moving;
 
     void Awake()
     {
@@ -76,7 +77,7 @@ public class ColoredCube : MonoBehaviour
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CubeButton.transform);
 
         Debug.LogFormat("[Colored Cube #{0}] The middle button was pressed at the last digit of the timer being {1}.", ModuleId, Math.Floor(Bomb.GetTime() % 60 % 10));
-        if (Math.Floor(Bomb.GetTime() % 60 % 10) == targetTime)
+        if (Math.Floor(Bomb.GetTime() % 60 % 10) == targetTime && !moving)
         {
             Debug.LogFormat("[Colored Cube #{0}] The last digit of the timer matched the number gotten from the table, cycling the cube...", ModuleId);
             curIndex++;
@@ -85,7 +86,7 @@ public class ColoredCube : MonoBehaviour
         }
         else
         {
-            Debug.LogFormat("[Colored Cube #{0}] The last digit of the timer did not match the number gotten from the table, submitting current position.", ModuleId);
+            Debug.LogFormat("[Colored Cube #{0}] The last digit of the timer did not match the number gotten from the table/moving has started, submitting current position.", ModuleId);
             Submit();
         }
     }
@@ -119,6 +120,8 @@ public class ColoredCube : MonoBehaviour
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, BackFace.transform);
 
+        moving = true;
+
         if (curPosition - 7 < 0)
         {
             Debug.LogFormat("[Colored Cube #{0}] The back face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
@@ -146,6 +149,8 @@ public class ColoredCube : MonoBehaviour
             return;
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, RightFace.transform);
+
+        moving = true;
 
         if ((curPosition + 1) % 7 == 0)
         {
@@ -175,6 +180,8 @@ public class ColoredCube : MonoBehaviour
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, FrontFace.transform);
 
+        moving = true;
+
         if (curPosition + 7 > 48)
         {
             Debug.LogFormat("[Colored Cube #{0}] The front face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
@@ -202,6 +209,8 @@ public class ColoredCube : MonoBehaviour
             return;
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, LeftFace.transform);
+
+        moving = true;
 
         if (curPosition % 7 == 0)
         {
