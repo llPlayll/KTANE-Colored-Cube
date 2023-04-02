@@ -14,7 +14,15 @@ MonoBehaviour:
   id: coloredCube
   title: Colored Cube
   author: _Play_
-  description: 
-  version: -3
+  description: 'It grew up
+
+
+    Colored Cube!
+
+
+    Developed by Play
+
+    GoodHood helped'
+  version: 1
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: df7c103037a0f5c4e8e2155682d10c08, type: 3}
