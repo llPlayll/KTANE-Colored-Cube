@@ -264,7 +264,7 @@ public class ColoredCube : MonoBehaviour
                 targetTime = ((Bomb.GetSerialNumberNumbers().ToList())[(Bomb.GetSerialNumberNumbers()).ToList().Count - 1] + 7) % 10;
                 break;
         }
-        Debug.LogFormat("[Colored Cube #{0}] To cycle the cube, the middle of the it should be pressed at the last digit of the timer being {1}.", ModuleId, targetTime);
+        Debug.LogFormat("[Colored Cube #{0}] To cycle the cube, the middle of the cube should be pressed at the last digit of the timer being {1}.", ModuleId, targetTime);
     }
 
     void CalculateTargetPositions()
