@@ -68,6 +68,13 @@ public class ColoredCube : MonoBehaviour
 
     void MiddlePress()
     {
+        CubeButton.AddInteractionPunch();
+        if (ModuleSolved)
+        {
+            return;
+        }
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CubeButton.transform);
+
         Debug.LogFormat("Colored Cube #{0}. The middle button was pressed at the last digit of the timer being {1}.", ModuleId, Math.Floor(Bomb.GetTime() % 60 % 10));
         if (Math.Floor(Bomb.GetTime() % 60 % 10) == targetTime)
         {
@@ -105,6 +112,13 @@ public class ColoredCube : MonoBehaviour
 
     void BackPress()
     {
+        BackFace.AddInteractionPunch();
+        if (ModuleSolved)
+        {
+            return;
+        }
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, BackFace.transform);
+
         if (curPosition - 7 < 0)
         {
             Debug.LogFormat("Colored Cube #{0}. The back face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
@@ -127,6 +141,13 @@ public class ColoredCube : MonoBehaviour
 
     void RightPress()
     {
+        RightFace.AddInteractionPunch();
+        if (ModuleSolved)
+        {
+            return;
+        }
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, RightFace.transform);
+
         if ((curPosition + 1) % 7 == 0)
         {
             Debug.LogFormat("Colored Cube #{0}. The right face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
@@ -149,6 +170,13 @@ public class ColoredCube : MonoBehaviour
 
     void FrontPress()
     {
+        FrontFace.AddInteractionPunch();
+        if (ModuleSolved)
+        {
+            return;
+        }
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, FrontFace.transform);
+
         if (curPosition + 7 > 48)
         {
             Debug.LogFormat("Colored Cube #{0}. The front face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
@@ -171,6 +199,13 @@ public class ColoredCube : MonoBehaviour
 
     void LeftPress()
     {
+        LeftFace.AddInteractionPunch();
+        if (ModuleSolved)
+        {
+            return;
+        }
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, LeftFace.transform);
+
         if (curPosition % 7 == 0)
         {
             Debug.LogFormat("Colored Cube #{0}. The left face of the cube was pressed, but there is a wall in that direction, Strike!", ModuleId);
