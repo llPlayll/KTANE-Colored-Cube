@@ -26,6 +26,7 @@ public class ColoredCube : MonoBehaviour
     public KMSelectable RightFace;
     public KMSelectable FrontFace;
     public KMSelectable LeftFace;
+    public KMSelectable ResetButton;
 
     Color[] colorList = { Color.red, Color.green, Color.blue, Color.yellow, Color.magenta, Color.white, Color.black };
     string[] colorNamesList = { "R", "G", "B", "Y", "M", "W", "K" };
@@ -42,9 +43,12 @@ public class ColoredCube : MonoBehaviour
 
     int curIndex;
     int curPosition;
+    int startPosition;
     int targetTime;
     List<int> colorIndexes = new List<int>() { };
     List<int> targetPositions = new List<int>() { };
+    List<int> startPositions = new List<int>() { };
+
     bool colorblindActive;
     bool moving;
 
@@ -57,6 +61,7 @@ public class ColoredCube : MonoBehaviour
         RightFace.OnInteract += delegate () { RightPress(); return false; };
         FrontFace.OnInteract += delegate () { FrontPress(); return false; };
         LeftFace.OnInteract += delegate () { LeftPress(); return false; };
+        ResetButton.OnInteract += delegate () { ResetPress(); return false; };
 
         colorblindActive = Colorblind.ColorblindModeActive;
         ColorblindSet();
@@ -65,6 +70,11 @@ public class ColoredCube : MonoBehaviour
     void ColorblindSet()
     {
         colorblindText.gameObject.SetActive(colorblindActive);
+    }
+
+    void ResetPress()
+    {
+        
     }
 
     void MiddlePress()
