@@ -82,7 +82,7 @@ public class ColoredCube : MonoBehaviour
         curIndex = 0;
         moving = false;
         curPosition = startPosition;
-        targetPositions = startTargetPositions;
+        targetPositions = new List<int>(startTargetPositions);
 
         Debug.LogFormat("[Colored Cube #{0}] The reset button was pressed. Resetting the cube, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
         CubeCycle();
