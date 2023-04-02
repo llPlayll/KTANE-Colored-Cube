@@ -79,10 +79,12 @@ public class ColoredCube : MonoBehaviour
             return;
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CubeButton.transform);
-        curIndex = 1;
+        curIndex = 0;
         moving = false;
         curPosition = startPosition;
         targetPositions = startTargetPositions;
+
+        Debug.LogFormat("[Colored Cube #{0}] The reset button was pressed. Resetting the cube, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
         CubeCycle();
     }
 
@@ -126,7 +128,7 @@ public class ColoredCube : MonoBehaviour
         }
         else
         {
-            Debug.LogFormat("[Colored Cube #{0}] Submitted position is not one of the target positions, STRIKE!", ModuleId);
+            Debug.LogFormat("[Colored Cube #{0}] Submitted position is not one of the target positions, strike!", ModuleId);
             GetComponent<KMBombModule>().HandleStrike();
         }
     }
