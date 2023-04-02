@@ -47,7 +47,7 @@ public class ColoredCube : MonoBehaviour
     int targetTime;
     List<int> colorIndexes = new List<int>() { };
     List<int> targetPositions = new List<int>() { };
-    List<int> startPositions = new List<int>() { };
+    List<int> startTargetPositions = new List<int>() { };
 
     bool colorblindActive;
     bool moving;
@@ -74,7 +74,16 @@ public class ColoredCube : MonoBehaviour
 
     void ResetPress()
     {
-        
+        if (ModuleSolved)
+        {
+            return;
+        }
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CubeButton.transform);
+        curIndex = 1;
+        moving = false;
+        curPosition = startPosition;
+        targetPositions = startTargetPositions;
+        CubeCycle();
     }
 
     void MiddlePress()
@@ -249,12 +258,14 @@ public class ColoredCube : MonoBehaviour
         colorIndexes.Add(Rnd.Range(0, 7));
         Debug.LogFormat("[Colored Cube #{0}] Generated colors are {1}, {2}, {3}.", ModuleId, colorFullNamesList[colorIndexes[0]], colorFullNamesList[colorIndexes[1]], colorFullNamesList[colorIndexes[2]]);
 
-        curPosition = 7 * colorIndexes[1] + colorIndexes[2];
+        startPosition = 7 * colorIndexes[1] + colorIndexes[2];
+        curPosition = startPosition;
         Debug.LogFormat("[Colored Cube #{0}] Starting position is {1} in the grid.", ModuleId, "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString());
 
         CubeCycle();
         CalculateTime();
         CalculateTargetPositions();
+        targetPositions = startTargetPositions;
     }
 
     void CalculateTime()
@@ -326,9 +337,9 @@ public class ColoredCube : MonoBehaviour
                 curPairNumber[1] -= 7;
             }
 
-            targetPositions.Add((curPairNumber[0] - 1) * 7 + curPairNumber[1] - 1);
+            startTargetPositions.Add((curPairNumber[0] - 1) * 7 + curPairNumber[1] - 1);
         }
-        Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}", ModuleId, "ABCDEFG"[targetPositions[0] % 7].ToString() + (targetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[1] % 7].ToString() + (targetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[2] % 7].ToString() + (targetPositions[2] / 7 + 1).ToString());
+        Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
     }
 
     void CubeCycle()
