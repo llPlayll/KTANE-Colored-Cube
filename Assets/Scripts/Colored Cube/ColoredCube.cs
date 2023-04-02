@@ -231,7 +231,7 @@ public class ColoredCube : MonoBehaviour
         Debug.LogFormat("[Colored Cube #{0}] Generated colors are {1}, {2}, {3}.", ModuleId, colorFullNamesList[colorIndexes[0]], colorFullNamesList[colorIndexes[1]], colorFullNamesList[colorIndexes[2]]);
 
         curPosition = 7 * colorIndexes[1] + colorIndexes[2];
-        Debug.LogFormat("[Colored Cube #{0}] Starting positiong is {1} in the grid.", ModuleId, "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString());
+        Debug.LogFormat("[Colored Cube #{0}] Starting position is {1} in the grid.", ModuleId, "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString());
 
         CubeCycle();
         CalculateTime();
