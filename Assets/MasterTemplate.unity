@@ -315,6 +315,16 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1.0004797
       objectReference: {fileID: 0}
+    - target: {fileID: 102303271479092650, guid: db760b12b516cae47be346fe431b8026,
+        type: 2}
+      propertyPath: m_Text
+      value: HI PLAY
+      objectReference: {fileID: 0}
+    - target: {fileID: 102303271479092650, guid: db760b12b516cae47be346fe431b8026,
+        type: 2}
+      propertyPath: m_Color.rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: db760b12b516cae47be346fe431b8026, type: 2}
   m_IsPrefabParent: 0
