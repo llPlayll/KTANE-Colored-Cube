@@ -99,7 +99,7 @@ public class ColoredCube : MonoBehaviour
             targetPositions.Remove(curPosition);
             if (targetPositions.Count == 0)
             {
-                Debug.LogFormat("[Colored Cube #{0}] All target positions were submitted, the module is solved!", ModuleId);
+                Debug.LogFormat("[Colored Cube #{0}] All target positions were submitted, the module solved!", ModuleId);
                 GetComponent<KMBombModule>().HandlePass();
                 ModuleSolved = true;
             }
