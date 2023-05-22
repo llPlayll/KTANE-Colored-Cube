@@ -391,6 +391,7 @@ public class ColoredCube : MonoBehaviour
             case "middle":
                 if (tokens.Length == 1)
                 {
+                    yield return null;
                     CubeButton.OnInteract();
                     yield return new WaitForSeconds(0.1f);
                     break;
