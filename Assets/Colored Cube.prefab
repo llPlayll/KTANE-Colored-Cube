@@ -1829,7 +1829,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleType: coloredCube
   ModuleDisplayName: Colored Cube
-  RequiresTimerVisibility: 0
+  RequiresTimerVisibility: 1
 --- !u!114 &114684486024296034
 MonoBehaviour:
   m_ObjectHideFlags: 1

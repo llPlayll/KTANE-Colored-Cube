@@ -84,7 +84,8 @@ public class ColoredCube : MonoBehaviour
         curPosition = startPosition;
         targetPositions = new List<int>(startTargetPositions);
 
-        Debug.LogFormat("[Colored Cube #{0}] The reset button was pressed. Resetting the cube, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+        Debug.LogFormat("[Colored Cube #{0}] The reset button was pressed. Resetting the cube, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+        Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
         CubeCycle();
     }
 
@@ -119,11 +120,29 @@ public class ColoredCube : MonoBehaviour
         {
             Debug.LogFormat("[Colored Cube #{0}] Submitted position is one of the target positions. Correct!", ModuleId);
             targetPositions.Remove(curPosition);
-            if (targetPositions.Count == 0)
+            switch (targetPositions.Count)
             {
-                Debug.LogFormat("[Colored Cube #{0}] All target positions were submitted, the module solved!", ModuleId);
-                GetComponent<KMBombModule>().HandlePass();
-                ModuleSolved = true;
+                case 2:
+                {
+                    Debug.LogFormat("[Colored Cube #{0}] Target positions that still need to be submitted are {1} and {2}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString());
+                    break;
+                }
+                case 1:
+                {
+                    Debug.LogFormat("[Colored Cube #{0}] Last target position that needs to be submitted is {1}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString());
+                    break;
+                }
+                case 0:
+                {
+                    Debug.LogFormat("[Colored Cube #{0}] All target positions were submitted, module solved!", ModuleId);
+                    GetComponent<KMBombModule>().HandlePass();
+                    ModuleSolved = true;
+                    cubeMeshRenderer.material.color = Color.green;
+                    indexText.text = "";
+                    indexText.color = Color.white;
+                    colorblindText.text = "!";
+                    break;
+                }
             }
         }
         else
@@ -158,7 +177,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition -= 7;
-                Debug.LogFormat("[Colored Cube #{0}] The back face of the cube was pressed, moving up, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.LogFormat("[Colored Cube #{0}] The back face of the cube was pressed, moving up, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }        
         }
     }
@@ -188,7 +207,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition += 1;
-                Debug.LogFormat("[Colored Cube #{0}] The right face of the cube was pressed, moving right, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.LogFormat("[Colored Cube #{0}] The right face of the cube was pressed, moving right, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
@@ -218,7 +237,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition += 7;
-                Debug.LogFormat("[Colored Cube #{0}] The front face of the cube was pressed, moving down, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.LogFormat("[Colored Cube #{0}] The front face of the cube was pressed, moving down, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
@@ -248,7 +267,7 @@ public class ColoredCube : MonoBehaviour
             else
             {
                 curPosition -= 1;
-                Debug.LogFormat("[Colored Cube #{0}] The left face of the cube was pressed, moving left, current position: {1}", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+                Debug.LogFormat("[Colored Cube #{0}] The left face of the cube was pressed, moving left, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
             }
         }
     }
@@ -260,12 +279,13 @@ public class ColoredCube : MonoBehaviour
         colorIndexes.Add(Rnd.Range(0, 7));
         Debug.LogFormat("[Colored Cube #{0}] Generated colors are {1}, {2}, {3}.", ModuleId, colorFullNamesList[colorIndexes[0]], colorFullNamesList[colorIndexes[1]], colorFullNamesList[colorIndexes[2]]);
 
+        CubeCycle();
+        CalculateTime();  
+
         startPosition = 7 * colorIndexes[1] + colorIndexes[2];
         curPosition = startPosition;
         Debug.LogFormat("[Colored Cube #{0}] Starting position is {1} in the grid.", ModuleId, "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString());
 
-        CubeCycle();
-        CalculateTime();
         CalculateTargetPositions();
         targetPositions = startTargetPositions;
     }
@@ -341,7 +361,7 @@ public class ColoredCube : MonoBehaviour
 
             startTargetPositions.Add((curPairNumber[0] * 7 + curPairNumber[1] - 8));
         }
-        Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
+        Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
     }
 
     void CubeCycle()
@@ -372,88 +392,118 @@ public class ColoredCube : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} m/mid/middle to press the middle part of the cube at any time. !{0} m/mid/middle # to press the middle part of the cube at last digit of the timer being #. !{0} move u/b/r/d/f/l to move. Directions can be chained like so: !{0} move uurlf.";
+    private readonly string TwitchHelpMessage = @"!{0} m # to press the middle of the cube when the last digit of the timer is #. !{0} mm # to press the middle twice when the last digit of the timer is #. !{0} reset to press the reset button. !{0} u/b/r/d/f/l/m to press the corresponding faces. Moves can be chained like !{0} rubldm.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string Command)
     {
-        var tokens = Command.ToLowerInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-        if (tokens.Length == 0)
+        var commandArgs = Command.ToLowerInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+        if (commandArgs.Length == 0)
         {
             yield break;
         }
-
-        switch (tokens[0])
+        switch (commandArgs[0])
         {
             case "m":
-            case "mid":
-            case "middle":
-                if (tokens.Length == 1)
+            case "mm":
+                if (commandArgs.Length == 2)
+                {
+                    if ("1234567890".Contains(commandArgs[1]))
+                    {
+                        yield return null;
+
+                        for (int i = 0; i < commandArgs[0].Count(c => c == 'm'); i++)
+                        {
+                            string pressTime = commandArgs[1];
+
+                            string currentLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                            while (!(currentLastDigit == pressTime))
+                            {
+                                yield return null;
+                                currentLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                            }
+
+                            CubeButton.OnInteract();
+                            yield return new WaitForSeconds(0.4f);
+                        }
+                        yield return new WaitForSeconds(0.1f);
+                        break;
+                    }
+                    else
+                    {
+                        yield return "sendtochaterror Invalid press time!";
+                        break;
+                    }
+                }
+                else
                 {
                     yield return null;
                     CubeButton.OnInteract();
                     yield return new WaitForSeconds(0.1f);
+                    if (commandArgs[0] == "mm")
+                    {
+                        CubeButton.OnInteract();
+                        yield return new WaitForSeconds(0.1f);
+                    }
                     break;
                 }
-                if (!"0123456789".Contains(tokens[1]) || tokens[1].Length > 1)
-                {
-                    yield return null;
-                    yield return "sendtochaterror Invalid press time!";
-                    yield break;
-                }
-                string pressTime = tokens[1];
+            case "reset":
                 yield return null;
-
-                string curLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
-                while (!(curLastDigit == pressTime))
-                {
-                    yield return null;
-                    curLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
-                }
-                CubeButton.OnInteract();
+                ResetButton.OnInteract();
                 yield return new WaitForSeconds(0.1f);
                 break;
-            case "move":
-                if (tokens.Length == 1)
+            default:
+                int invalidChars = 0;
+                foreach(char move in commandArgs[0])
                 {
-                    yield return null;
-                    yield return "sendtochaterror No moves given!";
-                    yield break;
-                }
-                if (tokens.Length == 2)
-                {
-                    foreach (char token in tokens[1])
+                    if (!"ubrdflm".Contains(move.ToString()))
                     {
-                        switch (token.ToString().ToLowerInvariant())
-                        {
-                            case "u":
-                            case "b":
-                                BackFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            case "r":
-                                RightFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            case "d":
-                            case "f":
-                                FrontFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            case "l":
-                                LeftFace.OnInteract();
-                                yield return new WaitForSeconds(0.1f);
-                                break;
-                            default:
-                                yield break;
-                        }
+                        invalidChars++;
+                    }
+                }
+                if (invalidChars == commandArgs[0].Length)
+                {
+                    yield return "sendtochaterror Invalid command!";
+                }
+                else if (invalidChars > 1)
+                {
+                    yield return "sendtochaterror Invalid move!";
+                }
+
+                yield return null;
+                foreach (char move in commandArgs[0])
+                {
+                    switch (move)
+                    {
+                        case 'u':
+                        case 'b':
+                            BackFace.OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                            break;
+                        case 'r':
+                            RightFace.OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                            break;
+                        case 'd':
+                        case 'f':
+                            FrontFace.OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                            break;
+                        case 'l':
+                            LeftFace.OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                            break;
+                        case 'm':
+                            CubeButton.OnInteract();
+                            yield return new WaitForSeconds(0.1f);
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
-            default:
-                yield break;
         }
+                    
     }
 
     IEnumerator TwitchHandleForcedSolve()
