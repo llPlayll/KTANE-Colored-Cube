@@ -82,7 +82,7 @@ public class ColoredCube : MonoBehaviour
         curIndex = 0;
         moving = false;
         curPosition = startPosition;
-        targetPositions = new List<int>(startTargetPositions);
+        targetPositions = startTargetPositions.ConvertAll(position => position);
 
         Debug.LogFormat("[Colored Cube #{0}] The reset button was pressed. Resetting the cube, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
         Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
@@ -106,9 +106,14 @@ public class ColoredCube : MonoBehaviour
             curIndex %= 3;
             CubeCycle();
         }
+        else if (moving)
+        {
+            Debug.LogFormat("[Colored Cube #{0}] Submitting current position.", ModuleId);
+            Submit();
+        }
         else
         {
-            Debug.LogFormat("[Colored Cube #{0}] The last digit of the timer did not match the number gotten from the table/moving has started, submitting current position.", ModuleId);
+            Debug.LogFormat("[Colored Cube #{0}] The last digit of the timer did not match the number gotten from the table, submitting current position.", ModuleId);
             Submit();
         }
     }
@@ -124,12 +129,12 @@ public class ColoredCube : MonoBehaviour
             {
                 case 2:
                 {
-                    Debug.LogFormat("[Colored Cube #{0}] Target positions that still need to be submitted are {1} and {2}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString());
+                    Debug.LogFormat("[Colored Cube #{0}] Target positions that still need to be submitted are {1} and {2}.", ModuleId, "ABCDEFG"[targetPositions[0] % 7].ToString() + (targetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[targetPositions[1] % 7].ToString() + (targetPositions[1] / 7 + 1).ToString());
                     break;
                 }
                 case 1:
                 {
-                    Debug.LogFormat("[Colored Cube #{0}] Last target position that needs to be submitted is {1}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString());
+                    Debug.LogFormat("[Colored Cube #{0}] Last target position that needs to be submitted is {1}.", ModuleId, "ABCDEFG"[targetPositions[0] % 7].ToString() + (targetPositions[0] / 7 + 1).ToString());
                     break;
                 }
                 case 0:
@@ -287,7 +292,7 @@ public class ColoredCube : MonoBehaviour
         Debug.LogFormat("[Colored Cube #{0}] Starting position is {1} in the grid.", ModuleId, "ABCDEFG"[colorIndexes[2]].ToString() + (colorIndexes[1] + 1).ToString());
 
         CalculateTargetPositions();
-        targetPositions = startTargetPositions;
+        targetPositions = startTargetPositions.ConvertAll(position => position);
     }
 
     void CalculateTime()
