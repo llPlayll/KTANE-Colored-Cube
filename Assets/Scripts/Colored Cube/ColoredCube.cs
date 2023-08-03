@@ -466,13 +466,10 @@ public class ColoredCube : MonoBehaviour
                         invalidChars++;
                     }
                 }
-                if (invalidChars == commandArgs[0].Length)
+                if (invalidChars > 0)
                 {
-                    yield return "sendtochaterror Invalid command!";
-                }
-                else if (invalidChars > 1)
-                {
-                    yield return "sendtochaterror Invalid move!";
+                    yield return "sendtochaterror Invalid move/command!";
+                    break;
                 }
 
                 yield return null;
