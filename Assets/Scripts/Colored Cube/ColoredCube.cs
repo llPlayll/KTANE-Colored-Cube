@@ -397,7 +397,8 @@ public class ColoredCube : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} m # to press the middle of the cube when the last digit of the timer is #. !{0} mm # to press the middle twice when the last digit of the timer is #. !{0} reset to press the reset button. !{0} u/b/r/d/f/l/m to press the corresponding faces. Moves can be chained like !{0} rubldm.";
+    private readonly string TwitchHelpMessage = @"!{0} m # to press the middle of the cube when the last digit of the timer is #. !{0} mm # to press the middle twice when the last digit of the timer is #. !{0} reset to press the reset button. !{0} u/b/r/d/f/l/m to press the corresponding faces. Moves can be chained like !{0} rubldm. !{0} cb to toggle colourblind mode.";
+    private bool TwitchPlaysActive = false;
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string Command)
@@ -456,6 +457,11 @@ public class ColoredCube : MonoBehaviour
                 yield return null;
                 ResetButton.OnInteract();
                 yield return new WaitForSeconds(0.1f);
+                break;
+            case "cb":
+                yield return null;
+                colorblindActive = !colorblindActive;
+                ColorblindSet();
                 break;
             default:
                 int invalidChars = 0;
