@@ -26,7 +26,6 @@ public class ColoredCube : MonoBehaviour
     public KMSelectable RightFace;
     public KMSelectable FrontFace;
     public KMSelectable LeftFace;
-    public KMSelectable ResetButton;
 
     Color[] colorList = { Color.red, Color.green, Color.blue, Color.yellow, Color.magenta, Color.white, Color.black };
     string[] colorNamesList = { "R", "G", "B", "Y", "M", "W", "K" };
@@ -51,17 +50,20 @@ public class ColoredCube : MonoBehaviour
 
     bool colorblindActive;
     bool moving;
+    bool holding;
+    bool resetIndicated;
+    float holdTime;
 
     void Awake()
     {
         ModuleId = ModuleIdCounter++;
 
-        CubeButton.OnInteract += delegate () { MiddlePress(); return false; };
+        CubeButton.OnInteract += delegate () { holding = true; return false; };
+        CubeButton.OnInteractEnded += delegate () { MiddleRelease(); };
         BackFace.OnInteract += delegate () { BackPress(); return false; };
         RightFace.OnInteract += delegate () { RightPress(); return false; };
         FrontFace.OnInteract += delegate () { FrontPress(); return false; };
         LeftFace.OnInteract += delegate () { LeftPress(); return false; };
-        ResetButton.OnInteract += delegate () { ResetPress(); return false; };
 
         colorblindActive = Colorblind.ColorblindModeActive;
         ColorblindSet();
@@ -72,7 +74,7 @@ public class ColoredCube : MonoBehaviour
         colorblindText.gameObject.SetActive(colorblindActive);
     }
 
-    void ResetPress()
+    void Reset()
     {
         if (ModuleSolved)
         {
@@ -84,12 +86,12 @@ public class ColoredCube : MonoBehaviour
         curPosition = startPosition;
         targetPositions = startTargetPositions.ConvertAll(position => position);
 
-        Debug.LogFormat("[Colored Cube #{0}] The reset button was pressed. Resetting the cube, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
+        Debug.LogFormat("[Colored Cube #{0}] The middle button was held for 2 or more seconds. Resetting the cube, current position: {1}.", ModuleId, "ABCDEFG"[curPosition % 7].ToString() + (curPosition / 7 + 1).ToString());
         Debug.LogFormat("[Colored Cube #{0}] Target positions are {1}, {2} and {3}.", ModuleId, "ABCDEFG"[startTargetPositions[0] % 7].ToString() + (startTargetPositions[0] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[1] % 7].ToString() + (startTargetPositions[1] / 7 + 1).ToString(), "ABCDEFG"[startTargetPositions[2] % 7].ToString() + (startTargetPositions[2] / 7 + 1).ToString());
         CubeCycle();
     }
 
-    void MiddlePress()
+    void MiddleRelease()
     {
         CubeButton.AddInteractionPunch();
         if (ModuleSolved)
@@ -97,6 +99,15 @@ public class ColoredCube : MonoBehaviour
             return;
         }
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CubeButton.transform);
+
+        holding = false;
+        holdTime = 0;
+        if (resetIndicated)
+        {
+            resetIndicated = false;
+            Reset();
+            return;
+        }
 
         Debug.LogFormat("[Colored Cube #{0}] The middle button was pressed at the last digit of the timer being {1}.", ModuleId, Math.Floor(Bomb.GetTime() % 60 % 10));
         if (Math.Floor(Bomb.GetTime() % 60 % 10) == targetTime && !moving)
@@ -396,6 +407,20 @@ public class ColoredCube : MonoBehaviour
         Debug.LogFormat("[Colored Cube #{0}] Current color is {1}, which is position {2} in the sequence.", ModuleId, colorFullNamesList[colorIndexes[curIndex]], curIndex + 1);
     }
 
+    void Update()
+    {
+        if (ModuleSolved) return;
+        if (!resetIndicated)
+        {
+            if (holding) holdTime += Time.deltaTime;
+            if (holdTime >= 2)
+            {
+                Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonRelease, CubeButton.transform);
+                resetIndicated = true;
+            }
+        }
+    }
+
 #pragma warning disable 414
     private readonly string TwitchHelpMessage = @"!{0} m # to press the middle of the cube when the last digit of the timer is #. !{0} mm # to press the middle twice when the last digit of the timer is #. !{0} reset to press the reset button. !{0} u/b/r/d/f/l/m to press the corresponding faces. Moves can be chained like !{0} rubldm. !{0} cb to toggle colourblind mode.";
     private bool TwitchPlaysActive = false;
@@ -455,7 +480,9 @@ public class ColoredCube : MonoBehaviour
                 }
             case "reset":
                 yield return null;
-                ResetButton.OnInteract();
+                CubeButton.OnInteract();
+                yield return new WaitForSeconds(2.1f);
+                CubeButton.OnInteractEnded();
                 yield return new WaitForSeconds(0.1f);
                 break;
             case "cb":
