@@ -420,6 +420,113 @@ public class ColoredCube : MonoBehaviour
             }
         }
     }
+    
+    List<List<int>> FindPermutations(List<int> set)
+    {
+        List<List<int>> permutations = new List<List<int>>();
+        switch (set.Count)
+        {
+            case 3:
+                permutations.Add(new List<int> { set[0], set[1], set[2] });
+                permutations.Add(new List<int> { set[0], set[2], set[1] });
+                permutations.Add(new List<int> { set[1], set[0], set[2] });
+                permutations.Add(new List<int> { set[1], set[2], set[0] });
+                permutations.Add(new List<int> { set[2], set[0], set[1] });
+                permutations.Add(new List<int> { set[2], set[1], set[0] });
+                break;
+            case 2:
+                permutations.Add(new List<int> { set[0], set[1] });
+                permutations.Add(new List<int> { set[1], set[0] });
+                break;
+            case 1:
+                permutations.Add(set);
+                break;
+            default:
+                break;
+        }
+        return permutations;
+    }
+
+    string GetShortestPath(int start, int end)
+    {
+        List<int> pathGrid = new List<int>
+        {-1, -1, -1, -1, -1, -1, -1,
+         -1, -1, -1, -1, -1, -1, -1,
+         -1, -1, -1, -1, -1, -1, -1,
+         -1, -1, -1, -1, -1, -1, -1,
+         -1, -1, -1, -1, -1, -1, -1,
+         -1, -1, -1, -1, -1, -1, -1,
+         -1, -1, -1, -1, -1, -1, -1};
+        pathGrid[start] = 0;
+        int curNumber = 0;
+        while (pathGrid[end] == -1 && curNumber < 49)
+        {
+            for (int i = 0; i < 49; i++)
+            {
+                if (pathGrid[i] == curNumber)
+                {
+                    if (i - 7 > -1)
+                    {
+                        if (pathGrid[i - 7] == -1 && (grid[i - 7] != colorIndexes[1] || i - 7 == end)) pathGrid[i - 7] = curNumber + 1;
+                    }                                                              
+                    if ((i + 1) % 7 != 0)                                          
+                    {                                                              
+                        if (pathGrid[i + 1] == -1 && (grid[i + 1] != colorIndexes[1] || i + 1 == end)) pathGrid[i + 1] = curNumber + 1;
+                    }                                                              
+                    if (i + 7 < 49)                                                
+                    {                                                              
+                        if (pathGrid[i + 7] == -1 && (grid[i + 7] != colorIndexes[1] || i + 7 == end)) pathGrid[i + 7] = curNumber + 1;
+                    }
+                    if (i % 7 != 0)
+                    {
+                        if (pathGrid[i - 1] == -1 && (grid[i - 1] != colorIndexes[1] || i - 1 == end)) pathGrid[i - 1] = curNumber + 1;
+                    }
+                }
+            }
+            curNumber++;
+        }
+
+        int curPosition = end;
+        string path = "";
+        for (int i = curNumber; i > -1; i--)
+        {
+            if (curPosition - 7 > -1)
+            {
+                if (pathGrid[curPosition - 7] == i)
+                {
+                    curPosition -= 7;
+                    path += "D";
+                }
+            }
+            if ((curPosition + 1) % 7 != 0)
+            {
+                if (pathGrid[curPosition + 1] == i)
+                {
+                    curPosition++;
+                    path += "L";
+                }
+            }
+            if (curPosition + 7 < 49)
+            {
+                if (pathGrid[curPosition + 7] == i)
+                {
+                    curPosition += 7;
+                    path += "U";
+                }
+            }
+            if (curPosition % 7 != 0)
+            {
+                if (pathGrid[curPosition - 1] == i)
+                {
+                    curPosition--;
+                    path += "R";
+                }
+            }
+        }
+        char[] pathArray = path.ToCharArray();
+        pathArray = pathArray.Reverse().ToArray();
+        return new string(pathArray);
+    }
 
 #pragma warning disable 414
     private readonly string TwitchHelpMessage = @"!{0} m # to press the middle of the cube when the last digit of the timer is #. !{0} mm # to press the middle twice when the last digit of the timer is #. !{0} reset to press the reset button. !{0} u/b/r/d/f/l/m to press the corresponding faces. Moves can be chained like !{0} rubldm. !{0} cb to toggle colourblind mode.";
@@ -537,12 +644,60 @@ public class ColoredCube : MonoBehaviour
                     }
                 }
                 break;
-        }
-                    
+        }         
     }
 
     IEnumerator TwitchHandleForcedSolve()
     {
+        List<string> paths = new List<string>();
+        foreach (List<int> perm in FindPermutations(targetPositions))
+        {
+            string path = "";
+            for (int i = 0; i < perm.Count; i++)
+            {
+                int start = i == 0 ? curPosition : perm[i - 1];
+                path += GetShortestPath(start, perm[i]) + "M";
+            }
+            paths.Add(path);
+        }
+        int minPathLength = paths.Select(x => x.Length).Min();
+        foreach (char c in paths.Where(x => x.Length == minPathLength).ToArray()[0])
+        {
+            switch (c)
+            {
+                case 'U':
+                    BackFace.OnInteract();
+                    yield return new WaitForSeconds(0.05f);
+                    break;
+                case 'R':
+                    RightFace.OnInteract();
+                    yield return new WaitForSeconds(0.05f);
+                    break;
+                case 'D':
+                    FrontFace.OnInteract();
+                    yield return new WaitForSeconds(0.05f);
+                    break;
+                case 'L':
+                    LeftFace.OnInteract();
+                    yield return new WaitForSeconds(0.05f);
+                    break;
+                case 'M':
+                    if (!moving)
+                    {
+                        string currentLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                        while (currentLastDigit == targetTime.ToString())
+                        {
+                            yield return null;
+                            currentLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                        }
+                    }
+                    CubeButton.OnInteractEnded();
+                    yield return new WaitForSeconds(0.05f);
+                    break;
+                default:
+                    break;
+            }
+        }
         yield return null;
     }
 }
