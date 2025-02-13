@@ -576,11 +576,11 @@ public class ColoredCube : MonoBehaviour
                 else
                 {
                     yield return null;
-                    CubeButton.OnInteract();
+                    CubeButton.OnInteractEnded();
                     yield return new WaitForSeconds(0.1f);
                     if (commandArgs[0] == "mm")
                     {
-                        CubeButton.OnInteract();
+                        CubeButton.OnInteractEnded();
                         yield return new WaitForSeconds(0.1f);
                     }
                     break;
