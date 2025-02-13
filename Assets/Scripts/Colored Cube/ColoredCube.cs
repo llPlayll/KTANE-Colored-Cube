@@ -636,7 +636,7 @@ public class ColoredCube : MonoBehaviour
                             yield return new WaitForSeconds(0.1f);
                             break;
                         case 'm':
-                            CubeButton.OnInteract();
+                            CubeButton.OnInteractEnded();
                             yield return new WaitForSeconds(0.1f);
                             break;
                         default:
