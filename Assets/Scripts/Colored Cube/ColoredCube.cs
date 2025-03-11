@@ -554,11 +554,11 @@ public class ColoredCube : MonoBehaviour
                         {
                             string pressTime = commandArgs[1];
 
-                            string currentLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                            string currentLastDigit = ((int)Bomb.GetTime() % 10).ToString();
                             while (!(currentLastDigit == pressTime))
                             {
                                 yield return null;
-                                currentLastDigit = Bomb.GetFormattedTime()[Bomb.GetFormattedTime().Length - 1].ToString();
+                                currentLastDigit = ((int)Bomb.GetTime() % 10).ToString();
                             }
 
                             CubeButton.OnInteractEnded();
