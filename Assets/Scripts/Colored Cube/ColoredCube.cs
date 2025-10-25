@@ -155,8 +155,8 @@ public class ColoredCube : MonoBehaviour
                     ModuleSolved = true;
                     cubeMeshRenderer.material.color = Color.green;
                     indexText.text = "";
-                    indexText.color = Color.white;
                     colorblindText.text = "!";
+                    colorblindText.color = Color.white;
                     break;
                 }
             }
